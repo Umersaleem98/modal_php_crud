@@ -1,0 +1,202 @@
+<?php
+include("connection.php");
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" c ontent="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+    <!-- model for inserting data  -->
+
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add User</h5>
+                </div>
+                <div class="modal-body">
+
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label for="">Name</label>
+                            <input type="text" name="name" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Phone</label>
+                            <input type="number" name="phone" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Password</label>
+                            <input type="Password" name="password" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-primary" id="" required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- insertion code in php -->
+
+    <?php
+        if(isset($_POST['submit']))
+        {
+            $name = $_POST['name'];
+            $email = $_POST['email'];
+            $phone = $_POST['phone'];
+            $password = $_POST['password'];
+
+            $query = "INSERT INTO `person`(`name`, `email`, `phone`, `password`) VALUES ('$name','$email','$phone','$password')";
+
+            $result = mysqli_query($conn, $query);
+
+            if($result)
+            {
+                echo "your data is inserted";
+                header('location: index.php');
+            }
+            else
+            {
+                echo "error occour";
+            }
+
+        }
+
+    ?>
+
+    <!-- insertion code ended  -->
+
+
+
+
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-10">
+
+                <button type="button" class="btn btn-primary my-5" data-toggle="modal" data-target=".modal">
+                    Add User
+                </button>
+                <table class="table table-bordered my-1">
+                    <tr>
+                        <th>id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Password</th>
+                        <th>Action</th>
+                    </tr>
+
+                    <?php
+                        $query = "SELECT * FROM `person`";
+
+                    $result = mysqli_query($conn, $query);
+                    while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                    <!-- here we close the php tag because now we use html tags of the table  -->
+
+                    <tr>
+
+                        <td> <?php echo $row['id']  ?> </td>
+                        <td><?php echo $row['name']  ?></td>
+                        <td><?php echo $row['email']  ?></td>
+                        <td><?php echo $row['phone']  ?></td>
+                        <td><?php echo $row['password']  ?></td>
+                        <td><a href="index.php?id=<?php echo $row['id']?>" data-toggle="modal"
+                                data-target="#updateUserModal" class="btn btn-danger">Update</a></td>
+
+                    </tr>
+
+                    <?php
+                    }
+
+                    ?>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- pdate code start  -->
+
+
+    <?php
+
+$id = $_GET['id'];
+
+$query = "SELECT * FROM `person` WHERE id='$id'";
+
+?>
+
+
+
+
+
+    <div class="modal" id="updateUserModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update User</h5>
+                </div>
+                <div class="modal-body">
+
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label for="">Name</label>
+                            <input type="text" name="name" class="form-control" id=""
+                                value="<?php echo "{$row['name']}"; ?>" required>
+                        </div>
+                        <div class=" form-group">
+                            <label for="">Email</label>
+                            <input type="email" name="email" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Phone</label>
+                            <input type="number" name="phone" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Password</label>
+                            <input type="Password" name="password" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-primary" id="" required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
